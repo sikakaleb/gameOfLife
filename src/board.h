@@ -17,4 +17,7 @@ void freeBoard(Board* b);
 Board* loadBoardFromFile(const char* filename);
 int saveBoardToFile(const Board* b, const char* filename);
 
+/* Fonction utilitaire pour copier un Board */
+Board* copyBoard(const Board* src);
+
 #endif

@@ -51,10 +51,19 @@ int saveBoardToFile(const Board* b, const char* filename) {
     for(int y = 0; y < b->height; y++) {
         for(int x = 0; x < b->width; x++) {
             CellState c = b->cells[y * b->width + x];
-            fprintf(f, "%d ", c == ALIVE ? 1 : 0);
+            fprintf(f, "%d ", (c == ALIVE) ? 1 : 0);
         }
         fprintf(f, "\n");
     }
     fclose(f);
     return 1;
+}
+
+Board* copyBoard(const Board* src) {
+    if(!src) return NULL;
+    Board* copy = createBoard(src->width, src->height);
+    for(int i = 0; i < src->width * src->height; i++) {
+        copy->cells[i] = src->cells[i];
+    }
+    return copy;
 }
