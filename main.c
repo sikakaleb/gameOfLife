@@ -17,7 +17,7 @@ static void printBoard(const Board* b) {
 }
 
 int main() {
-    Board* initial = loadBoardFromFile("grid.txt");
+    Board* initial = loadBoardFromFile("../resources/grid.txt");
     if(!initial) {
         printf("Unable to load grid.txt\n");
         return 1;
