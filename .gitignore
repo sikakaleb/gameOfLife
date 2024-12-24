@@ -35,7 +35,3 @@ cmake-build-*/
 # Backup files
 *.orig
 *.rej
-
-# Ignore the history files
-src/history.h
-src/history.c
