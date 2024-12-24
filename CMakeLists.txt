@@ -1,22 +1,15 @@
-cmake_minimum_required(VERSION 3.29)
+cmake_minimum_required(VERSION 3.15)
 project(gameOfLife C)
-
 set(CMAKE_C_STANDARD 11)
 
-# Chemin vers SDL2
-set(CMAKE_PREFIX_PATH "C:/SDL2")
-set(SDL2_DIR "C:/SDL2/cmake")
+find_package(SDL2 CONFIG REQUIRED)
 
-# Trouver SDL2
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
-
-add_executable(gameOfLife main.c
+add_executable(gameOfLife
+        main.c
         src/board.c
-        src/board.h
         src/rules.c
-        src/rules.h
-        src/history.h
         src/history.c
         src/graphics.c
-        src/graphics.h)
+)
+
+target_link_libraries(gameOfLife PRIVATE SDL2::SDL2 SDL2::SDL2main)
