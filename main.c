@@ -1,25 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "src/board.h"
 #include "src/rules.h"
 #include "src/history.h"
-
-static void printBoard(const Board* b) {
-    if(!b) return;
-    for(int y = 0; y < b->height; y++) {
-        for(int x = 0; x < b->width; x++) {
-            printf("%c", b->cells[y * b->width + x] == ALIVE ? 'O' : '.');
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
+#include "src/graphics.h"
 
 int main() {
-    Board* initial = loadBoardFromFile("../resources/grid.txt");
+    Board* initial = loadBoardFromFile("grid.txt");
     if(!initial) {
-        printf("Unable to load grid.txt\n");
+        printf("Failed to load grid.txt\n");
         return 1;
     }
 
@@ -27,47 +16,29 @@ int main() {
     pushGeneration(history, initial);
     freeBoard(initial);
 
-    while(1) {
-        Board* current = getCurrentBoard(history);
-        if(!current) {
-            printf("No board loaded.\n");
-            break;
-        }
+    int cellSize = 20; // taille en pixels d'une cellule
+    int offsetX = 10;  // marge à gauche
+    int offsetY = 10;  // marge en haut
 
-        printf("Current generation index: %d\n", history->currentIndex);
-        printBoard(current);
-        printf("Commands: [n] next, [p] previous, [s] step forward, [S] save all, [q] quit\n> ");
+    int windowWidth = history->states[0]->width * cellSize + 2 * offsetX;
+    int windowHeight = history->states[0]->height * cellSize + 2 * offsetY;
 
-        char cmd[10];
-        if(!fgets(cmd, sizeof(cmd), stdin)) {
-            break;
-        }
-        if(cmd[0] == 'q') {
-            break;
-        }
-        if(cmd[0] == 'p') {
-            if(canGoPrevious(history)) {
-                goPrevious(history);
-            } else {
-                printf("Can't go to previous generation.\n");
-            }
-        } else if(cmd[0] == 'n') {
-            if(canGoNext(history)) {
-                goNext(history);
-            } else {
-                printf("Can't go to next generation.\n");
-            }
-        } else if(cmd[0] == 's') {
-            Board* next = createBoard(current->width, current->height);
-            nextGeneration(current, next);
-            pushGeneration(history, next);
-            freeBoard(next);
-        } else if(cmd[0] == 'S') {
-            saveAllGenerations(history);
-            printf("All generations saved.\n");
-        }
+    if(initSDL(windowWidth, windowHeight) < 0) {
+        printf("Could not initialize SDL.\n");
+        freeHistory(history);
+        return 1;
     }
 
+    int quit = 0;
+    while(!quit) {
+        Board* current = getCurrentBoard(history);
+        if(current) {
+            renderBoard(current, cellSize, offsetX, offsetY);
+        }
+        quit = handleEvents(history);
+    }
+
+    closeSDL();
     freeHistory(history);
     return 0;
 }
