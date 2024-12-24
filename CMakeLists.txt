@@ -9,4 +9,6 @@ add_executable(gameOfLife main.c
         src/rules.c
         src/rules.h
         src/history.h
-        src/history.c)
+        src/history.c
+        src/graphics.c
+        src/graphics.h)
