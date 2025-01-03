@@ -13,3 +13,4 @@ add_executable(gameOfLife
 )
 
 target_link_libraries(gameOfLife PRIVATE SDL2::SDL2 SDL2::SDL2main)
+file(COPY resources/grid.txt DESTINATION ${CMAKE_BINARY_DIR}/resources)

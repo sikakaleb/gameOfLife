@@ -9,7 +9,7 @@
 #include "src/graphics.h"
 
 int main() {
-    Board* initial = loadBoardFromFile("../resources/grid.txt");
+    Board* initial = loadBoardFromFile("resources/grid.txt");
     if(!initial) {
         printf("Failed to load grid.txt\n");
         return 1;
